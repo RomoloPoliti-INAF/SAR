@@ -8,8 +8,9 @@ from planetary_coverage import ESA_MK, MetaKernel
 from rich import inspect
 
 from SAR.config import conf
+from SAR.sendmail import mail,page
 
-version = Vers((0, 1, 0, 'd', 2))
+version = Vers((0, 1, 0, 'd', 3))
 
 __version__ = version.full()
 
@@ -136,6 +137,12 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool):
         conf.console.print("run Update")
         conf.log.info("Saving the current Kernel", verbosity=1)
         save_kernel(kernels)
+        txt=f"The SOIM Output was updatet due a Metakernel changes ({Path(info['latest']).name})"
+        try:
+            mail('SOIM Output Updated', text=txt, html=page(
+                f"<strong>{txt}</strong><br/>"))
+        except Exception as e:
+            conf.log.error(f"Impossible send the email. ({e.args[1]})")
 
 
 if __name__ == "__main__":
