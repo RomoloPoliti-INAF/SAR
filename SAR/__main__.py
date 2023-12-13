@@ -9,7 +9,7 @@ from rich import inspect
 
 from SAR.config import conf
 
-version=Vers((0,1,0,'d',2))
+version = Vers((0, 1, 0, 'd', 2))
 
 __version__ = version.full()
 
@@ -18,89 +18,125 @@ click.rich_click.FOOTER_TEXT = progEpilog
 click.rich_click.HEADER_TEXT = f"SOIM Authomatic Runner, version [blue]{
     __version__}[/blue]"
 
+
 class KernelType:
-    def __init__(self,name,item) -> None:
-        self.name=name
-        self.list=[item]
-    def __repr__(self) -> str:
-        return f"[{' , '.join(x for x in self.list)}]"
+    def __init__(self, name, item) -> None:
+        self.name = name
+        if isinstance(item,str):
+            self.list = [item]
+        else:
+            self.list=[*item]
+
+    # def __repr__(self) -> str:
+    #     return f"[{' , '.join(x for x in self.list)}]"
+
+    def __eq__(self, other):
+        if isinstance(other, KernelType):
+            return self.name == other.name and self.list == other.list
+        return False
 
 
 class KernelsTypes:
-    def type_list(self)->list:
-        ls=[]
+    def type_list(self) -> list:
+        ls = []
         for item in self.__dict__:
             if not item.startswith('_'):
                 ls.append(item)
         return ls
-    
-    def add(self,ker):
-        parts=ker.split('/')
+
+    def add(self, ker):
+        parts = ker.split('/')
         if parts[1] not in self.type_list():
-            setattr(self,parts[1],KernelType(parts[1],parts[2]))
+            setattr(self, parts[1], KernelType(parts[1], parts[2]))
         else:
-            item=getattr(self,parts[1])
+            item = getattr(self, parts[1])
             item.list.append(parts[2])
-def compare_kernels(ls1:list,ls2:list)->tuple[list,list]:
-    a= set(ls1).intersection(ls2)
-    b=set(ls1) - set(ls2)
+
+    def __eq__(self, other) -> bool:
+        # Check if the type lists are the same
+
+        return all(getattr(self, x) == getattr(other, x)
+                   for x in self.type_list())
+
+
+def find_element_with_substring(lst, substring):
+    # Use a list comprehension to find elements containing the substring
+    result = [element for element in lst if substring in element]
+
+    # Return the first match (or None if not found)
+    return result[0] if result else None
+
+
+def serialize_kernels_types(kernels_types):
+    import json
+    return json.dumps(kernels_types, default=lambda obj: obj.__dict__, indent=4)
+
+
+def deserialize_kernels_types(json_data):
+    import json
+    data = json.loads(json_data)
+    kernels_types = KernelsTypes()
+
+    for key, value in data.items():
+        setattr(kernels_types, key, KernelType(value['name'], value['list']))
+
+    return kernels_types
+
+
+def compare_kernels(ls1: list, ls2: list) -> tuple[list, list]:
+    a = set(ls1).intersection(ls2)
+    b = set(ls1) - set(ls2)
     return list(a), list(b)
-    
-def check_updated(kernels:KernelsTypes)->bool:
-    if conf.check_file.exists():
-        data=read_yaml(conf.check_file)
-    else:
-        data={'kernels':[]}
-        import yaml
-        with open(conf.check_file,FMODE.WRITE) as fl:
-            yaml.dump(data,fl)
-        
-    
-    if len(data['kernels']) == 0:
-        conf.log.info('No kernels to check', verbosity=1)
+
+
+def item_version(item: str) -> str:
+    return f"{item.split('_')[-1].split('.')[0]}."
+
+
+def check_updated(kernels: KernelsTypes) -> bool:
+    with open('current_kernel.json', FMODE.READ) as inp:
+        old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
+    if old_kernels == kernels:
         return False
     else:
-        present, missing=compare_kernels(data['kernels'].keys(),kernels.type_list())
-        if len (missing) !=0:
-            conf.log.critical(f"Some selected kernels types are missing in the MetaKernel ({','.join(missing)})")
-            exit(1)
-        elif len(present)==0:
-            conf.log.critical("None of the selected kernel types are in the MetaKernel")
-            exit(1)
-        else:
-            pass
-        # if data['kernels'].keys() == kernels.type_list():
+        return True
 
-
+def save_kernel(kernels:KernelsTypes)->None:
+    with open('current_kernel.json', FMODE.WRITE) as outp:
+        outp.write(serialize_kernels_types(kernels))
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.option('-k','--kernel','kernel_folder',help="Kernels folder",metavar="FOLDER",default='kernels', show_default=True)
-@click.option('-d','--debug', is_flag=True,help=debug_help_text, default=False)
-@click.option('-v','--verbose', count=True,metavar="", help=verbose_help_text,default=0)
+@click.option('-k', '--kernel', 'kernel_folder', help="Kernels folder", metavar="FOLDER", default='kernels', show_default=True)
+@click.option('-d', '--debug', is_flag=True, help=debug_help_text, default=False)
+@click.option('-v', '--verbose', count=True, metavar="", help=verbose_help_text, default=0)
+@click.option('--save-current', is_flag=True, hidden=True, default=False)
 @click.version_option(__version__, '-V', '--version', prog_name='SOIM Authomatic Run')
-def action(kernel_folder:Path,debug:bool, verbose:int):
-    conf.debug=debug
-    conf.verbose=verbose
+def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool):
+    conf.debug = debug
+    conf.verbose = verbose
     # conf.logFile=Path('mylog.log')
     info = ESA_MK['MPO']
     conf.console.print(info['latest'])
-    kernel_folder=Path(kernel_folder)
+    kernel_folder = Path(kernel_folder)
     if not kernel_folder.exists():
         kernel_folder.mkdir(parents=True)
-    a= MetaKernel(
+    a = MetaKernel(
         info['latest'],
         kernels=kernel_folder,
         download=True,
     )
     conf.console.print(a)
-    kernels=KernelsTypes()
+    kernels = KernelsTypes()
     for item in a.kernels:
         kernels.add(item)
-        
-    # Quale kernel deve essere controllato?
+    if save_current:
+        save_kernel(kernels)
+        exit(0)
     if check_updated(kernels):
-        pass
+        conf.console.print("run Update")
+        conf.log.info("Saving the current Kernel", verbosity=1)
+        save_kernel(kernels)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     action()

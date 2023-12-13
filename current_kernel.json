@@ -1,0 +1,125 @@
+{
+    "ck": {
+        "name": "ck",
+        "list": [
+            "bc_mpo_magboom_default_s20191107_v01.bc",
+            "bc_mpo_mga_zero_s20191107_v02.bc",
+            "bc_mpo_hga_zero_s20191107_v02.bc",
+            "bc_mpo_sa_zero_s20191107_v02.bc",
+            "bc_mpo_mertis_zero_s20191107_v02.bc",
+            "bc_mpo_serena_zero_s20191207_v02.bc",
+            "bc_mpo_phebus_zero_s20210408_v02.bc",
+            "bc_mtm_sa_zero_f20181121_v01.bc",
+            "bc_mmo_sc_scp_20180317_20251220_f20170228_v02.bc",
+            "bc_mmo_sc_slt_50038_20251220_20280305_f20170228_v02.bc",
+            "bc_mtm_sc_scp_20180317_20251219_f20181121_v02.bc",
+            "bc_mtm_sep_scp_20181019_20251205_f20181127_v02.bc",
+            "bc_mmo_sc_slt_extension_20280305_20300305_f20170228_v02.bc",
+            "bc_mpo_sc_sct_50041_20181019_20251219_f20181127_v03.bc",
+            "bc_mpo_sc_sct_50041_20230511_20251219_f20181127_v01.bc",
+            "bc_mpo_sc_prelaunch_f20181121_v01.bc",
+            "bc_mpo_sc_sct_50034_20251205_20260314_f20181127_v03.bc",
+            "bc_mpo_sc_slt_50028_20260314_20280529_f20181127_v03.bc",
+            "bc_mpo_sc_fcp_00159_20181020_20240119_f20181127_v02.bc"
+        ]
+    },
+    "fk": {
+        "name": "fk",
+        "list": [
+            "bc_mpo_v34.tf",
+            "bc_mtm_v12.tf",
+            "bc_mmo_v13.tf",
+            "bc_ops_v01.tf",
+            "bc_sci_v12.tf",
+            "bc_dsk_surfaces_v03.tf",
+            "rssd0004.tf",
+            "earth_topo_201023.tf",
+            "earthstns_jaxa_20230905.tf",
+            "earthfixeditrf93.tf",
+            "estrack_v04.tf"
+        ]
+    },
+    "dsk": {
+        "name": "dsk",
+        "list": [
+            "bc_mmo_sc_bus_v02.bds",
+            "bc_mpo_sc_bus_v02.bds",
+            "bc_mpo_sc_hga_v02.bds",
+            "bc_mpo_sc_mga_v02.bds",
+            "bc_mpo_sc_mosif_v02.bds",
+            "bc_mpo_sc_sa_v02.bds",
+            "bc_mtm_sc_bus_v02.bds",
+            "bc_mtm_sc_samx_v02.bds",
+            "bc_mtm_sc_sapx_v02.bds",
+            "mercury_m002_mes_v02.bds"
+        ]
+    },
+    "ik": {
+        "name": "ik",
+        "list": [
+            "bc_mpo_bela_v09.ti",
+            "bc_mpo_mertis_v08.ti",
+            "bc_mpo_mgns_v02.ti",
+            "bc_mpo_mixs_v06.ti",
+            "bc_mpo_phebus_v06.ti",
+            "bc_mpo_serena_v08.ti",
+            "bc_mpo_simbio-sys_v10.ti",
+            "bc_mpo_sixs_v08.ti",
+            "bc_mpo_str_v02.ti",
+            "bc_mpo_aux_v01.ti",
+            "bc_mtm_mcam_v05.ti",
+            "bc_mmo_mppe_v04.ti",
+            "bc_mmo_msasi_v03.ti",
+            "bc_mmo_ssas_v01.ti"
+        ]
+    },
+    "lsk": {
+        "name": "lsk",
+        "list": [
+            "naif0012.tls"
+        ]
+    },
+    "pck": {
+        "name": "pck",
+        "list": [
+            "de403_masses.tpc",
+            "gm_de431.tpc",
+            "pck00011_bc_v00.tpc",
+            "earth_070425_370426_predict.bpc"
+        ]
+    },
+    "sclk": {
+        "name": "sclk",
+        "list": [
+            "bc_mpo_step_20231129.tsc",
+            "bc_mpo_fict_20181127.tsc",
+            "bc_mmo_fict_20170228.tsc"
+        ]
+    },
+    "spk": {
+        "name": "spk",
+        "list": [
+            "de432s.bsp",
+            "earthstns_itrf93_201023.bsp",
+            "earthstns_jaxa_20230905.bsp",
+            "estrack_v04.bsp",
+            "bc_sci_v02.bsp",
+            "bc_mmo_struct_v01.bsp",
+            "bc_mmo_scp_20181019_20251220_v02.bsp",
+            "bc_mmo_mlt_50038_20251220_20280305_v05.bsp",
+            "bc_mmo_slt_extension_20280305_20300305_v01.bsp",
+            "bc_mtm_struct_v06.bsp",
+            "bc_mtm_scp_20181019_20251219_v03.bsp",
+            "bc_mpo_cog_v03.bsp",
+            "bc_mpo_cog_00159_20181118_20231126_v01.bsp",
+            "bc_mpo_struct_v09.bsp",
+            "bc_mpo_schulte_vector_v01.bsp",
+            "bc_mpo_prelaunch_v01.bsp",
+            "bc_mpo_mlt_50037_20260314_20280529_v05.bsp",
+            "bc_mpo_slt_extension_20280529_20300529_v01.bsp",
+            "bc_mpo_mcp_50041_20181019_20251219_v02.bsp",
+            "bc_mpo_mcp_50034_20251205_20260314_v03.bsp",
+            "bc_mpo_fcp_00159_20181020_20260328_v02.bsp"
+        ]
+    }
+}
