@@ -8,9 +8,9 @@ from planetary_coverage import ESA_MK, MetaKernel
 from rich import inspect
 
 from SAR.config import conf
-from SAR.sendmail import mail,page
+from SAR.sendmail import mail, page
 
-version = Vers((0, 1, 0, 'd', 3))
+version = Vers((0, 1, 0, 'd', 4))
 
 __version__ = version.full()
 
@@ -35,6 +35,9 @@ class KernelType:
         if isinstance(other, KernelType):
             return self.name == other.name and self.list == other.list
         return False
+    
+    def __sub__(self, other):
+        return list(set(self.list)-set(other(list)))
 
 
 class KernelsTypes:
@@ -55,9 +58,31 @@ class KernelsTypes:
 
     def __eq__(self, other) -> bool:
         # Check if the type lists are the same
+        for x in self.type_list():
+            diff=getattr(self,x)-getattr(other,x)
+            if len(diff)== 0:
+                return True
+            else:
+                if x in conf.check_update.keys():
+                    if with_substring(x.list,conf.check_update[x]):
+                        return False
+                    else:
+                        return True
+                else:
+                    return False
 
         return all(getattr(self, x) == getattr(other, x)
                    for x in self.type_list())
+
+
+def with_substring(list_string, list_substring):
+    # Itera attraverso ogni stringa nella lista delle substringhe
+    for substring in list_substring:
+        # Verifica se la substringa è presente in almeno una delle stringhe nella lista
+        if any(substring in elem for elem in list_string):
+            return True
+    # Se nessuna corrispondenza è stata trovata, restituisci False
+    return False
 
 
 def find_element_with_substring(lst, substring):
@@ -95,7 +120,7 @@ def item_version(item: str) -> str:
 
 
 def check_updated(kernels: KernelsTypes) -> bool:
-    with open('current_kernel.json', FMODE.READ) as inp:
+    with open(conf.curr_kernel, FMODE.READ) as inp:
         old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
     if old_kernels == kernels:
         return False
@@ -103,7 +128,7 @@ def check_updated(kernels: KernelsTypes) -> bool:
         return True
 
 def save_kernel(kernels:KernelsTypes)->None:
-    with open('current_kernel.json', FMODE.WRITE) as outp:
+    with open(conf.curr_kernel, FMODE.WRITE) as outp:
         outp.write(serialize_kernels_types(kernels))
 
 @click.command(context_settings=CONTEXT_SETTINGS)

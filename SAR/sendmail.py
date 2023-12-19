@@ -1,9 +1,11 @@
 import smtplib
-from SAR.config import conf
-import rich_click as click
 from email.headerregistry import Address
 from email.message import EmailMessage
+
+import rich_click as click
 from MyCommonLib import debug_help_text
+
+from SAR.config import conf
 
 
 def page(item):
