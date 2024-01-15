@@ -20,7 +20,7 @@
             "bc_mpo_sc_prelaunch_f20181121_v01.bc",
             "bc_mpo_sc_sct_50034_20251205_20260314_f20181127_v03.bc",
             "bc_mpo_sc_slt_50028_20260314_20280529_f20181127_v03.bc",
-            "bc_mpo_sc_fcp_00159_20181020_20240119_f20181127_v02.bc"
+            "bc_mpo_sc_fcp_00160_20181020_20240216_f20181127_v01.bc"
         ]
     },
     "fk": {
@@ -91,7 +91,7 @@
     "sclk": {
         "name": "sclk",
         "list": [
-            "bc_mpo_step_20231129.tsc",
+            "bc_mpo_step_20240110.tsc",
             "bc_mpo_fict_20181127.tsc",
             "bc_mmo_fict_20170228.tsc"
         ]
@@ -111,7 +111,7 @@
             "bc_mtm_struct_v06.bsp",
             "bc_mtm_scp_20181019_20251219_v03.bsp",
             "bc_mpo_cog_v03.bsp",
-            "bc_mpo_cog_00159_20181118_20231126_v01.bsp",
+            "bc_mpo_cog_00160_20181118_20240201_v01.bsp",
             "bc_mpo_struct_v09.bsp",
             "bc_mpo_schulte_vector_v01.bsp",
             "bc_mpo_prelaunch_v01.bsp",
@@ -119,7 +119,7 @@
             "bc_mpo_slt_extension_20280529_20300529_v01.bsp",
             "bc_mpo_mcp_50041_20181019_20251219_v02.bsp",
             "bc_mpo_mcp_50034_20251205_20260314_v03.bsp",
-            "bc_mpo_fcp_00159_20181020_20260328_v02.bsp"
+            "bc_mpo_fcp_00160_20181020_20260328_v01.bsp"
         ]
     }
 }

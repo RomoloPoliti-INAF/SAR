@@ -1,4 +1,7 @@
 /kernels
 /soimAuto.code-workspace
 /venv
+/venv2
 .vscode/*
+/build
+/src/SAR.egg-info

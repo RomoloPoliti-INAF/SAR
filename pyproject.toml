@@ -1,0 +1,47 @@
+[project]
+name = "SAR"
+version = "1.0.0"
+description="SOIM Auto Runner"
+dependencies = [
+    "rich",
+    "rich_click",
+    "planetary-coverage",
+    "myCommonLib@git+https://github.com/RomoloPoliti-INAF/myCommonLib",
+    "SOIM@git+https://github.com/simionie/SOIM.git ",
+
+    'setuptools',
+    'importlib-metadata; python_version>"3.10"',
+]
+
+authors = [{name="Emanuele Simioni", email="Emanuele.Simioni@inaf.it"},
+    {name="Romolo Politi", email ="Romolo.Politi@inaf.it" }]
+license = {text = "GNU GPL ver3"} 
+readme = "README.md"
+
+
+keywords = ["Space Mission", "BepiColombo", "SIMBIO_SYS", "MCAM"]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
+]
+
+[project.urls]
+Repository = "https://github.com/RomoloPoliti-INAF/soimAuto"
+Changelog = "https://github.com/RomoloPoliti-INAF/soimAuto/CHANGELOG.md"
+
+[project.optional-dependencies]
+docs = ["sphinx"]
+
+[project.scripts]
+sar = "SAR.__main__:action"
+
+
+
+[tool.setuptools.package-data]
+
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+

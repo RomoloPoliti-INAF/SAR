@@ -1,3 +1,4 @@
-git+https://github.com/RomoloPoliti-INAF/myCommonLib  
+git+https://github.com/RomoloPoliti-INAF/myCommonLib
+git+https://github.com/simionie/SOIM.git  
 rich-click
 planetary-coverage
