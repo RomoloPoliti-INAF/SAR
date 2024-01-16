@@ -111,7 +111,7 @@ def deserialize_kernels_types(json_data):
     return kernels_types
 
 
-def compare_kernels(ls1: list, ls2: list) -> tuple[list, list]:
+def compare_kernels(ls1: list, ls2: list):
     a = set(ls1).intersection(ls2)
     b = set(ls1) - set(ls2)
     return list(a), list(b)
