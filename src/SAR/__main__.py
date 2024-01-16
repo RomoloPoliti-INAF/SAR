@@ -18,8 +18,7 @@ __version__ = version.full()
 
 click.rich_click.USE_RICH_MARKUP = True
 click.rich_click.FOOTER_TEXT = progEpilog
-click.rich_click.HEADER_TEXT = f"SOIM Authomatic Runner, version [blue]{
-    __version__}[/blue]"
+click.rich_click.HEADER_TEXT = f"SOIM Authomatic Runner, version [blue]{__version__}[/blue]"
 
 
 class KernelType:
