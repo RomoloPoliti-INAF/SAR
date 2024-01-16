@@ -129,7 +129,8 @@ def check_updated(kernels: KernelsTypes,curr_proj:dict) -> bool:
         old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
     if old_kernels == kernels:
         import json
-        data = json.loads('curr_project.json')
+        with open('curr_project.json',FMODE.READ) as fl:
+            data = json.loads(fl.read())
         if data == curr_proj:
             return False
         else:
