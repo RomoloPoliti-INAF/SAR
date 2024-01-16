@@ -1,5 +1,5 @@
 # SOIM Auto Runner
-![Version 0.1.0.devel.4](https://img.shields.io/badge/version-0.1.0.devel.4-blue?style=plastic)
+![Version 1.0.1.devel.1](https://img.shields.io/badge/version-1.0.1.devel.1-blue?style=plastic)
 ![Language Python 3.12.1](https://img.shields.io/badge/python-3.12.1-orange?style=plastic&logo=python)
 
 ## Install

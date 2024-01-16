@@ -12,7 +12,8 @@ from SAR.sendmail import mail, page
 from SOIM.core import core_soim
 
 
-version = Vers((0, 1, 0, 'd', 4))
+
+version = Vers((1, 0, 1, 'd', 1))
 
 __version__ = version.full()
 

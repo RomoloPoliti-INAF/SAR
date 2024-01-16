@@ -1,6 +1,6 @@
 [project]
 name = "SAR"
-version = "1.0.0"
+version = "1.0.1"
 description="SOIM Auto Runner"
 dependencies = [
     "rich",
@@ -37,6 +37,7 @@ sar = "SAR.__main__:action"
 
 
 [tool.setuptools.package-data]
+SAR=['check.yml']
 
 
 [build-system]
