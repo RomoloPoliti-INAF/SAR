@@ -150,7 +150,7 @@ def save_kernel(kernels:KernelsTypes)->None:
 @click.version_option(__version__, '-V', '--version', prog_name='SOIM Authomatic Run')
 def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,save_project:bool):
     list_projects = read_yaml(
-        Path('~/projects/projects_list.yml').expanduser())
+        Path('~/projects/project_list.yml').expanduser())
     if save_project:
         import json
         
