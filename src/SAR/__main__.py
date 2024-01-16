@@ -121,14 +121,19 @@ def item_version(item: str) -> str:
     return f"{item.split('_')[-1].split('.')[0]}."
 
 
-def check_updated(kernels: KernelsTypes) -> bool:
+def check_updated(kernels: KernelsTypes,curr_proj:dict) -> bool:
     if not Path(conf.curr_kernel).exists():
         save_kernel(kernels)
         return False
     with open(conf.curr_kernel, FMODE.READ) as inp:
         old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
     if old_kernels == kernels:
-        return False
+        import json
+        data = json.loads('curr_project.json')
+        if data == curr_proj:
+            return False
+        else:
+            return True
     else:
         return True
 
@@ -141,8 +146,18 @@ def save_kernel(kernels:KernelsTypes)->None:
 @click.option('-d', '--debug', is_flag=True, help=debug_help_text, default=False)
 @click.option('-v', '--verbose', count=True, metavar="", help=verbose_help_text, default=0)
 @click.option('--save-current', is_flag=True, hidden=True, default=False)
+@click.option('--save-project',is_flag=True,hidden=True,default=False)
 @click.version_option(__version__, '-V', '--version', prog_name='SOIM Authomatic Run')
-def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool):
+def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,save_project:bool):
+    list_projects = read_yaml(
+        Path('~/projects/projects_list.yml').expanduser())
+    if save_project:
+        import json
+        
+        with open('curr_project.json', FMODE.WRITE) as outp:
+            outp.write(json.dumps(list_projects,
+                       default=lambda obj: obj.__dict__, indent=4))
+        exit(0)
     conf.debug = debug
     conf.verbose = verbose
     # conf.logFile=Path('mylog.log')
@@ -163,7 +178,7 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool):
     if save_current:
         save_kernel(kernels)
         exit(0)
-    if check_updated(kernels):
+    if check_updated(kernels, list_projects):
         conf.console.print("run Update")
         conf.log.info("Saving the current Kernel", verbosity=1)
         save_kernel(kernels)
