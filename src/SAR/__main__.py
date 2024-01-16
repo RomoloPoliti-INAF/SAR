@@ -122,6 +122,9 @@ def item_version(item: str) -> str:
 
 
 def check_updated(kernels: KernelsTypes) -> bool:
+    if not Path(conf.curr_kernel).exists():
+        save_kernel(kernels)
+        return False
     with open(conf.curr_kernel, FMODE.READ) as inp:
         old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
     if old_kernels == kernels:
