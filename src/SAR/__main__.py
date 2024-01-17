@@ -188,7 +188,7 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         project_list_file = Path('~/projects/project_list.yml').expanduser()
         # core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser(),False)
         try:
-            subprocess.run("echo 'Test sar'| sendmail emanuele.simioni@inaf.it", shell=True, executable="/bin/bash")
+            subprocess.run(f"echo 'Subject: Test sar\n {txt}'| sendmail emanuele.simioni@inaf.it,romolo.politi@inaf.it", shell=True, executable="/bin/bash")
             mail('SOIM Output Updated', text=txt, html=page(
                 f"<strong>{txt}</strong><br/>"))
             conf.console.log("Test")
