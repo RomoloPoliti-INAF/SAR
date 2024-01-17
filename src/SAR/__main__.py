@@ -77,6 +77,12 @@ class KernelsTypes:
         return all(getattr(self, x) == getattr(other, x)
                    for x in self.type_list())
 
+def project_list_updater(list_projects):
+    import json
+        
+    with open('curr_project.json', FMODE.WRITE) as outp:
+        outp.write(json.dumps(list_projects,
+                    default=lambda obj: obj.__dict__, indent=4))
 
 def with_substring(list_string, list_substring):
     # Itera attraverso ogni stringa nella lista delle substringhe
@@ -125,23 +131,24 @@ def item_version(item: str) -> str:
 def check_updated(kernels: KernelsTypes,curr_proj:dict) -> bool:
     if not Path(conf.curr_kernel).exists():
         save_kernel(kernels)
-        conf.console.log("Update because the kernel JSON not exists")
+        conf.log.debug("Update because the kernel JSON not exists")
         return True
     with open(conf.curr_kernel, FMODE.READ) as inp:
         old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
     if old_kernels == kernels:
-        conf.console.log("the old and the new kernel are the same")
+        conf.log.debug("the old and the new kernel are the same")
         import json
         with open('curr_project.json',FMODE.READ) as fl:
             data = json.loads(fl.read())
         if data == curr_proj:
-            conf.console.log("the new and the old project list are the same")
+            conf.log.debug("the new and the old project list are the same")
             return False
         else:
-            conf.console.log("the new and the old project list are not the same")
+            conf.log.debug("the new and the old project list are not the same")
+            project_list_updater(data)
             return True
     else:
-        conf.console.log("the old and the new kernel are not the same")
+        conf.log.debug("the old and the new kernel are not the same")
         return True
 
 def save_kernel(kernels:KernelsTypes)->None:
@@ -159,11 +166,7 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
     list_projects = read_yaml(
         Path('~/projects/project_list.yml').expanduser())
     if save_project:
-        import json
-        
-        with open('curr_project.json', FMODE.WRITE) as outp:
-            outp.write(json.dumps(list_projects,
-                       default=lambda obj: obj.__dict__, indent=4))
+        project_list_updater(list_projects)
         exit(0)
     conf.debug = debug
     conf.verbose = verbose
