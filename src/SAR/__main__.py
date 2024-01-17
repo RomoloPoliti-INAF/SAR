@@ -1,5 +1,6 @@
 import subprocess
 from pathlib import Path
+from platform import python_version
 from sys import exit
 
 import rich_click as click
@@ -8,10 +9,7 @@ from MyCommonLib import (CONTEXT_SETTINGS, FMODE, Vers, debug_help_text,
 from planetary_coverage import ESA_MK, MetaKernel
 
 from SAR.config import conf
-from platform import python_version
-
 from SAR.sendmail import mail, page
-
 
 version = Vers((1, 0, 1, 'd', 1))
 
@@ -205,16 +203,19 @@ def save_kernel(kernels: KernelsTypes) -> None:
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.option('-k', '--kernel', 'kernel_folder', help="Kernels folder", metavar="FOLDER", default='kernels', show_default=True)
+@click.option('-k', '--kernel', 'kernel_folder', help="Kernels folder", metavar="FOLDER", default='~/kernels', show_default=True)
+@click.option('-p', '--project-list', metavar="FILE", help="Path and name of the project list file", default='~/projects/project_list.yml',show_default=True)
+@click.option('-o','--output-folder',metavar="FOLDER",help="Set the SOIM output folder",default="~/output_soim",show_default=True)
 @click.option('-d', '--debug', is_flag=True, help=debug_help_text, default=False)
 @click.option('-v', '--verbose', count=True, metavar="", help=verbose_help_text, default=0)
 @click.option('--save-current', is_flag=True, hidden=True, default=False)
 @click.option('--save-project', is_flag=True, hidden=True, default=False)
 @click.option('--test', is_flag=True, hidden=True, default=False)
 @click.version_option(__version__, '-V', '--version', prog_name='SOIM Authomatic Run')
-def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool, save_project: bool, test: bool):
+def action(kernel_folder: Path,project_list:Path, output_folder:Path,debug: bool, verbose: int, save_current: bool, save_project: bool, test: bool):
+    project_list_file = Path(project_list).expanduser()
     list_projects = read_yaml(
-        Path('~/projects/project_list.yml').expanduser())
+        project_list_file)
     if save_project:
         project_list_updater(list_projects)
         exit(0)
@@ -222,8 +223,8 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool, s
     conf.verbose = verbose
     # conf.logFile=Path('mylog.log')
     info = ESA_MK['MPO']
-    conf.console.print(info['latest'])
-    kernel_folder = Path(kernel_folder)
+    # conf.console.print(info['latest'])
+    kernel_folder = Path(kernel_folder).expanduser()
     if not kernel_folder.exists():
         kernel_folder.mkdir(parents=True)
     a = MetaKernel(
@@ -231,7 +232,7 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool, s
         kernels=kernel_folder,
         download=True,
     )
-    conf.console.print(a)
+    # conf.console.print(a)
     kernels = KernelsTypes()
     for item in a.kernels:
         kernels.add(item)
@@ -239,16 +240,16 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool, s
         save_kernel(kernels)
         exit(0)
     if check_updated(kernels, list_projects):
-        conf.console.print("run Update")
+        conf.log.info("run Update",verbosity=1)
         conf.log.info("Saving the current Kernel", verbosity=1)
         save_kernel(kernels)
         # txt=f""
         
-        project_list_file = Path('~/projects/project_list.yml').expanduser()
+        
         if not test:
             from SOIM.core import core_soim
             core_soim(read_yaml(project_list_file), info['latest'], kernel_folder, Path(
-                '~/output_soim').expanduser(), False)
+                output_folder).expanduser(), False)
         try:
             if python_version()=='3.12.1':
                 mail('SOIM Output Updated', text=corpus, html=page(
@@ -264,7 +265,7 @@ The SOIM Output was updated.\n The update is due to {conf.message}.
                 
             # conf.console.log("Test")
         except Exception as e:
-            conf.log.error(f"Impossible send the email. ({e.args[1]})")
+            conf.log.error(f"Impossible to send the email. ({e.args[1]})")
 
 
 if __name__ == "__main__":
