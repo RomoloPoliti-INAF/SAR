@@ -125,18 +125,23 @@ def item_version(item: str) -> str:
 def check_updated(kernels: KernelsTypes,curr_proj:dict) -> bool:
     if not Path(conf.curr_kernel).exists():
         save_kernel(kernels)
+        conf.console.log("Update because the kernel JSON not exists")
         return True
     with open(conf.curr_kernel, FMODE.READ) as inp:
         old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
     if old_kernels == kernels:
+        conf.console.log("the old and the new kernel are the same")
         import json
         with open('curr_project.json',FMODE.READ) as fl:
             data = json.loads(fl.read())
         if data == curr_proj:
+            conf.console.log("the new and the old project list are the same")
             return False
         else:
+            conf.console.log("the new and the old project list are not the same")
             return True
     else:
+        conf.console.log("the old and the new kernel are not the same")
         return True
 
 def save_kernel(kernels:KernelsTypes)->None:
@@ -193,9 +198,9 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         # core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser(),False)
         try:
             subprocess.run(f"echo -e '{corpus}'| sendmail emanuele.simioni@inaf.it,romolo.politi@inaf.it", shell=True, executable="/bin/bash")
-            mail('SOIM Output Updated', text=txt, html=page(
-                f"<strong>{txt}</strong><br/>"))
-            conf.console.log("Test")
+            # mail('SOIM Output Updated', text=txt, html=page(
+            #     f"<strong>{txt}</strong><br/>"))
+            # conf.console.log("Test")
         except Exception as e:
             conf.log.error(f"Impossible send the email. ({e.args[1]})")
 
