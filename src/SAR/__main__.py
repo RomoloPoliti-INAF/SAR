@@ -201,11 +201,11 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         # txt=f""
         corpus=f'''Subject: [SAR] SOIM Output Updated\n
         
-        The SOIM Output was updatet.\n The update is due to {conf.message}.
+        The SOIM Output was updated.\n The update is due to {conf.message}.
         
         '''
         project_list_file = Path('~/projects/project_list.yml').expanduser()
-        # core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser(),False)
+        core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser(),False)
         try:
             subprocess.run(f'echo -e "{corpus}"| sendmail {",".join(conf.distribution)}', shell=True, executable="/bin/bash")
             # mail('SOIM Output Updated', text=txt, html=page(
