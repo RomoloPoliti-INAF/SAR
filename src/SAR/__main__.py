@@ -198,9 +198,11 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         conf.console.print("run Update")
         conf.log.info("Saving the current Kernel", verbosity=1)
         save_kernel(kernels)
-        txt=f"The SOIM Output was updatet.\n The update is due to {conf.message}."
+        # txt=f""
         corpus=f"""Subject: [SAR] SOIM Output Updated\n
-        {txt}
+        
+        The SOIM Output was updatet.\n The update is due to {conf.message}.
+        
         """
         project_list_file = Path('~/projects/project_list.yml').expanduser()
         # core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser(),False)
