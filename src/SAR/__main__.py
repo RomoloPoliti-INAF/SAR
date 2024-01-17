@@ -124,7 +124,7 @@ def item_version(item: str) -> str:
 def check_updated(kernels: KernelsTypes,curr_proj:dict) -> bool:
     if not Path(conf.curr_kernel).exists():
         save_kernel(kernels)
-        return False
+        return True
     with open(conf.curr_kernel, FMODE.READ) as inp:
         old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
     if old_kernels == kernels:
@@ -185,7 +185,7 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         save_kernel(kernels)
         txt=f"The SOIM Output was updatet due a Metakernel changes ({Path(info['latest']).name})"
         project_list_file = Path('~/projects/project_list.yml').expanduser()
-        core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser())
+        core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser(),False)
         try:
             mail('SOIM Output Updated', text=txt, html=page(
                 f"<strong>{txt}</strong><br/>"))
