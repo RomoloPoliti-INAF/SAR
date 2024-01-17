@@ -145,7 +145,7 @@ def check_updated(kernels: KernelsTypes,curr_proj:dict) -> bool:
             return False
         else:
             conf.log.debug("the new and the old project list are not the same")
-            project_list_updater(data)
+            project_list_updater(curr_proj)
             return True
     else:
         conf.log.debug("the old and the new kernel are not the same")
