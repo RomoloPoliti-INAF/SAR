@@ -202,6 +202,8 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         corpus=f"""Subject: [SAR] SOIM Output Updated\n
         
         {txt}
+        
+        
         """
         project_list_file = Path('~/projects/project_list.yml').expanduser()
         # core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser(),False)
