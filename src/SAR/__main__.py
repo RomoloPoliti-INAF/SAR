@@ -131,7 +131,9 @@ def item_version(item: str) -> str:
 def check_updated(kernels: KernelsTypes,curr_proj:dict) -> bool:
     if not Path(conf.curr_kernel).exists():
         save_kernel(kernels)
-        conf.log.debug("Update because the kernel JSON not exists")
+        msg = "the kernel json file dosn't exists"
+        conf.message=msg
+        conf.log.debug(msg)
         return True
     with open(conf.curr_kernel, FMODE.READ) as inp:
         old_kernels: KernelsTypes = deserialize_kernels_types(inp.read())
@@ -144,11 +146,15 @@ def check_updated(kernels: KernelsTypes,curr_proj:dict) -> bool:
             conf.log.debug("the new and the old project list are the same")
             return False
         else:
-            conf.log.debug("the new and the old project list are not the same")
+            msg = "the project list was updated"
+            conf.message=msg
+            conf.log.debug(msg)
             project_list_updater(curr_proj)
             return True
     else:
-        conf.log.debug("the old and the new kernel are not the same")
+        msg = "the was Updated"
+        conf.message=msg
+        conf.log.debug(msg)
         return True
 
 def save_kernel(kernels:KernelsTypes)->None:
@@ -192,7 +198,7 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         conf.console.print("run Update")
         conf.log.info("Saving the current Kernel", verbosity=1)
         save_kernel(kernels)
-        txt=f"The SOIM Output was updatet due a Metakernel changes ({Path(info['latest']).name})"
+        txt=f"The SOIM Output was updatet.\n The update is due to {conf.message}"
         corpus=f"""Subject: [SAR] SOIM Output Updated\n
         
         {txt}
@@ -200,7 +206,7 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         project_list_file = Path('~/projects/project_list.yml').expanduser()
         # core_soim(read_yaml(project_list_file),info['latest'],kernel_folder,Path('~/output_soim').expanduser(),False)
         try:
-            subprocess.run(f"echo -e '{corpus}'| sendmail emanuele.simioni@inaf.it,romolo.politi@inaf.it", shell=True, executable="/bin/bash")
+            subprocess.run(f"echo -e '{corpus}'| sendmail {','.join(conf.distribution)}", shell=True, executable="/bin/bash")
             # mail('SOIM Output Updated', text=txt, html=page(
             #     f"<strong>{txt}</strong><br/>"))
             # conf.console.log("Test")
