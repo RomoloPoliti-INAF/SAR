@@ -189,6 +189,7 @@ def action(kernel_folder: Path, debug: bool, verbose: int, save_current: bool,sa
         try:
             mail('SOIM Output Updated', text=txt, html=page(
                 f"<strong>{txt}</strong><br/>"))
+            conf.console.log("Test")
         except Exception as e:
             conf.log.error(f"Impossible send the email. ({e.args[1]})")
 
