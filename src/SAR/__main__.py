@@ -246,6 +246,8 @@ def action(kernel_folder: Path, project_list: Path, output_folder: Path, debug: 
         conf.log.info("run Update", verbosity=1)
         conf.log.info("Saving the current Kernel", verbosity=1)
         save_kernel(kernels)
+        conf.log.info("Saving the current Project List", verbosity=1)
+        project_list_updater(list_projects)
         # txt=f""
 
         if not test:
