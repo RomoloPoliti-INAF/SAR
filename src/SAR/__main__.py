@@ -83,7 +83,7 @@ class KernelsTypes:
         # Check if the type lists are the same
         me = self.to_dict()
         ot = other.to_dict()
-        x = dict_diff(me-ot)
+        x = dict_diff(me,ot)
         if len(x) == 0:
             return True
         else:
