@@ -29,7 +29,6 @@ def list_diff(a: list, b: list) -> list:
 def dict_diff(a: dict, b: dict) -> dict:
     c = {x: a[x] for x in a.keys() if x not in b.keys()}
     d = {x: b[x] for x in b.keys() if x not in a.keys()}
-    conf.console.log(a)
     e = {x: list_diff(a[x], b[x]) for x in a.keys()
          if x in b.keys() and len(list_diff(a[x], b[x])) != 0}
 
@@ -84,8 +83,6 @@ class KernelsTypes:
         # Check if the type lists are the same
         me = self.to_dict()
         ot = other.to_dict()
-        conf.console.log(me)
-        conf.console.log(ot)
         x = dict_diff(me,ot)
         if len(x) == 0:
             return True
@@ -263,7 +260,7 @@ def action(kernel_folder: Path, project_list: Path, output_folder: Path, debug: 
 The SOIM Output was updated.\n The update is due to {conf.message}.
 
         '''
-                subprocess.run(f'echo -e "{corpus}"| /usr/bin/sendmail {",".join(conf.distribution)}', shell=True, executable="/bin/bash")
+                subprocess.run(f'echo -e "{corpus}"| /usr/lib/sendmail {",".join(conf.distribution)}', shell=True, executable="/bin/bash")
 
             # conf.console.log("Test")
         except Exception as e:
