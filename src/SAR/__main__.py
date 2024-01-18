@@ -29,6 +29,7 @@ def list_diff(a: list, b: list) -> list:
 def dict_diff(a: dict, b: dict) -> dict:
     c = {x: a[x] for x in a.keys() if x not in b.keys()}
     d = {x: b[x] for x in b.keys() if x not in a.keys()}
+    conf.console.log(a)
     e = {x: list_diff(a[x]['list'], b[x]['list']) for x in a.keys()
          if x in b.keys() and len(list_diff(a[x]['list'], b[x]['list'])) != 0}
 
