@@ -117,7 +117,7 @@ class KernelsTypes:
 
 def project_list_updater(list_projects):
     import json
-    conf.console.log(list_projects)
+    # conf.console.log(list_projects)
     with open('curr_project.json', FMODE.WRITE) as outp:
         outp.write(json.dumps(list_projects,
                               default=lambda obj: obj.__dict__, indent=4))
