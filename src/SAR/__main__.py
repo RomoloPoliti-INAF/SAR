@@ -75,7 +75,7 @@ class KernelsTypes:
         ret = {}
         for item in self.__dict__:
             if not item.startswith('_'):
-                ret[item] = getattr(self, 'list')
+                ret[item] = getattr(self, item.list)
         return ret
 
     def __eq__(self, other) -> bool:
