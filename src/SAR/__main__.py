@@ -259,8 +259,7 @@ def action(kernel_folder: Path, project_list: Path, output_folder: Path, debug: 
 The SOIM Output was updated.\n The update is due to {conf.message}.
 
         '''
-                subprocess.run(f'echo -e "{corpus}"| /usr/bin/sendmail {",".join(
-                    conf.distribution)}', shell=True, executable="/bin/bash")
+                subprocess.run(f'echo -e "{corpus}"| /usr/bin/sendmail {",".join(conf.distribution)}', shell=True, executable="/bin/bash")
 
             # conf.console.log("Test")
         except Exception as e:
