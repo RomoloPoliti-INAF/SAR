@@ -240,6 +240,8 @@ def action(kernel_folder: Path, project_list: Path, output_folder: Path, debug: 
     if save_current:
         save_kernel(kernels)
         exit(0)
+    if force:
+        conf.message="forced execution"
     if check_updated(kernels, list_projects) or force:
         conf.log.info("run Update", verbosity=1)
         conf.log.info("Saving the current Kernel", verbosity=1)
