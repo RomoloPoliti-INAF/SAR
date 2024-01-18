@@ -204,15 +204,16 @@ def save_kernel(kernels: KernelsTypes) -> None:
 
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.option('-k', '--kernel', 'kernel_folder', help="Kernels folder", metavar="FOLDER", default='~/kernels', show_default=True)
-@click.option('-p', '--project-list', metavar="FILE", help="Path and name of the project list file", default='~/projects/project_list.yml',show_default=True)
-@click.option('-o','--output-folder',metavar="FOLDER",help="Set the SOIM output folder",default="~/output_soim",show_default=True)
+@click.option('-p', '--project-list', metavar="FILE", help="Path and name of the project list file", default='~/projects/project_list.yml', show_default=True)
+@click.option('-o', '--output-folder', metavar="FOLDER", help="Set the SOIM output folder", default="~/output_soim", show_default=True)
 @click.option('-d', '--debug', is_flag=True, help=debug_help_text, default=False)
 @click.option('-v', '--verbose', count=True, metavar="", help=verbose_help_text, default=0)
 @click.option('--save-current', is_flag=True, hidden=True, default=False)
 @click.option('--save-project', is_flag=True, hidden=True, default=False)
-@click.option('--test', is_flag=True, hidden=True, default=False)
+@click.option('--test', is_flag=True, hidden=True, default=False, help="Do not execute SOIM, for test purpose")
+@click.option("--force", is_flag=True, hidden=True, default=False, help="Force the execution skipping the tests")
 @click.version_option(__version__, '-V', '--version', prog_name='SOIM Authomatic Run')
-def action(kernel_folder: Path,project_list:Path, output_folder:Path,debug: bool, verbose: int, save_current: bool, save_project: bool, test: bool):
+def action(kernel_folder: Path, project_list: Path, output_folder: Path, debug: bool, verbose: int, save_current: bool, save_project: bool, test: bool):
     project_list_file = Path(project_list).expanduser()
     list_projects = read_yaml(
         project_list_file)
@@ -239,19 +240,18 @@ def action(kernel_folder: Path,project_list:Path, output_folder:Path,debug: bool
     if save_current:
         save_kernel(kernels)
         exit(0)
-    if check_updated(kernels, list_projects):
-        conf.log.info("run Update",verbosity=1)
+    if check_updated(kernels, list_projects) or force:
+        conf.log.info("run Update", verbosity=1)
         conf.log.info("Saving the current Kernel", verbosity=1)
         save_kernel(kernels)
         # txt=f""
-        
-        
+
         if not test:
             from SOIM.core import core_soim
             core_soim(read_yaml(project_list_file), info['latest'], kernel_folder, Path(
                 output_folder).expanduser(), False)
         try:
-            if python_version()=='3.12.1':
+            if python_version() == '3.12.1':
                 mail('SOIM Output Updated', text=corpus, html=page(
                     f"<strong>The SOIM Output was updated.</strong><br/> The update is due to {conf.message}.<br/>"))
             else:
@@ -262,7 +262,7 @@ The SOIM Output was updated.\n The update is due to {conf.message}.
         '''
                 subprocess.run(f'echo -e "{corpus}"| /usr/bin/sendmail {",".join(
                     conf.distribution)}', shell=True, executable="/bin/bash")
-                
+
             # conf.console.log("Test")
         except Exception as e:
             conf.log.error(f"Impossible to send the email. ({e.args[1]})")
