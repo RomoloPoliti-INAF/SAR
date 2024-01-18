@@ -213,7 +213,7 @@ def save_kernel(kernels: KernelsTypes) -> None:
 @click.option('--test', is_flag=True, hidden=True, default=False, help="Do not execute SOIM, for test purpose")
 @click.option("--force", is_flag=True, hidden=True, default=False, help="Force the execution skipping the tests")
 @click.version_option(__version__, '-V', '--version', prog_name='SOIM Authomatic Run')
-def action(kernel_folder: Path, project_list: Path, output_folder: Path, debug: bool, verbose: int, save_current: bool, save_project: bool, test: bool):
+def action(kernel_folder: Path, project_list: Path, output_folder: Path, debug: bool, verbose: int, save_current: bool, save_project: bool, test: bool,force:bool):
     project_list_file = Path(project_list).expanduser()
     list_projects = read_yaml(
         project_list_file)
